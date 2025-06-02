@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "factverifai"
+version = "0.1.0"
+description = "AI-powered fact-checking Python library"
+authors = [{ name = "Your Name", email = "your@email.com" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "ipykernel",
+    "openai",
+    "ollama",
+    "exa_py",
+    "python-dotenv",
+    "spacy",
+    "langchain",
+    "langgraph",
+    "langchain_community",
+    "langchain-ollama"
+]
+
+[project.urls]
+Homepage = "https://github.com/a-i-flo/factverifai"
+
+[tool.setuptools.packages.find]
+where = ["factverifai"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]

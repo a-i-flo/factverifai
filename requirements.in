@@ -1,0 +1,6 @@
+python-dotenv
+requests
+rich
+langchain
+langchain-ollama
+langchain-exa
