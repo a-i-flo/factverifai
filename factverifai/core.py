@@ -16,8 +16,20 @@ from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_exa.tools import ExaSearchResults
+from openai import OpenAI
 
 # ---------- Utilities ----------
+class OpenAIChatLLM:
+    def __init__(self, api_key, base_url, model):
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
+        self.model = model
+
+    def invoke(self, prompt):
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return response.choices[0].message.content.strip()
 
 def timestamp_filename(prefix="fact_check", extension=".md") -> str:
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -95,12 +107,14 @@ def process_single_claim(
 def fact_check(
     text: str,
     output: str = "console",
-    model: str = "llama3.1",
+    model: str = "albert-small",
     exa_results: int = 5,
     treat_input_as_single_claim: bool = False,
     max_workers: int = 4,
     verbose: bool = False,
-    EXA_API_KEY
+    EXA_API_KEY=None,
+    OPENAI_API_KEY=None,
+    OPENAI_BASE_URL="https://albert.api.etalab.gouv.fr/v1"
 ) -> list:
     """
     Main pipeline: extract claims, search, process evidence, fact-check (parallel for each claim).
@@ -108,7 +122,11 @@ def fact_check(
     import time
     start_time = time.time()
     load_dotenv()
-    llm = OllamaLLM(model=model)
+    llm = OpenAIChatLLM(
+        api_key=OPENAI_API_KEY or os.getenv("OPENAI_API_KEY"),
+        base_url=OPENAI_BASE_URL,
+        model=model
+    )
     exa_tool = ExaSearchResults(EXA_API_KEY)
 
     # Claim extraction
