@@ -48,9 +48,6 @@ add-jupyter-kernel: create-env
 		$(ENV_NAME)/bin/python -m ipykernel install --user --name=$(ENV_NAME) --display-name "Jupyter $(ENV_NAME)"; \
 	fi
 
-postinstall: create-env
-	$(ENV_NAME)/bin/python -m spacy download en_core_web_sm
-
 activate:
 	@echo "To activate, run: source $(ENV_NAME)/bin/activate"
 

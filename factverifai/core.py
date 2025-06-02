@@ -11,11 +11,10 @@ from typing import List, Optional
 from rich.console import Console
 from rich.markdown import Markdown
 
-
-from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_exa.tools import ExaSearchResults
+from exa_py import Exa
 
 # ---------- Utilities ----------
 
@@ -100,16 +99,19 @@ def fact_check(
     treat_input_as_single_claim: bool = False,
     max_workers: int = 4,
     verbose: bool = False,
-    EXA_API_KEY
+    exa: str = None,
 ) -> list:
     """
     Main pipeline: extract claims, search, process evidence, fact-check (parallel for each claim).
     """
     import time
     start_time = time.time()
-    load_dotenv()
     llm = OllamaLLM(model=model)
-    exa_tool = ExaSearchResults(EXA_API_KEY)
+    exa_client = Exa(api_key=exa)
+    exa_tool = ExaSearchResults(
+        client=exa_client,
+        exa_api_key=exa,
+        )
 
     # Claim extraction
     if treat_input_as_single_claim:
