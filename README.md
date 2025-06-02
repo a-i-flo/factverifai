@@ -15,6 +15,7 @@ pip install factverifai
 Create new .env example from .env.example and paste EXA API key
 
 import os
+from dotenv import load_dotenv
 from factverifai import fact_check
 
 load_dotenv()
