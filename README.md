@@ -14,13 +14,13 @@ pip install factverifai
 ## How to use
 Create new .env example from .env.example and paste EXA API key
 
+```
 import os
 from dotenv import load_dotenv
 from factverifai import fact_check
 
 load_dotenv()
 
-```
 text = "Nicușor Dan is the president of Romania in 2025, winning against Simion"
 
 fact_check(text, output="files/", max_workers=4, verbose = True, exa=os.getenv("EXA_API_KEY"))
