@@ -19,7 +19,7 @@ charset-normalizer==3.4.2
     # via requests
 distro==1.9.0
     # via openai
-exa-py==1.13.1
+exa-py==1.14.0
     # via langchain-exa
 h11==0.16.0
     # via httpcore
@@ -46,7 +46,7 @@ jsonpointer==3.0.0
     # via jsonpatch
 langchain==0.3.25
     # via -r requirements.in
-langchain-core==0.3.62
+langchain-core==0.3.63
     # via
     #   langchain
     #   langchain-exa
@@ -58,7 +58,7 @@ langchain-ollama==0.3.3
     # via -r requirements.in
 langchain-text-splitters==0.3.8
     # via langchain
-langsmith==0.3.42
+langsmith==0.3.43
     # via
     #   langchain
     #   langchain-core
@@ -66,9 +66,9 @@ markdown-it-py==3.0.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-ollama==0.4.9
+ollama==0.5.1
     # via langchain-ollama
-openai==1.82.0
+openai==1.82.1
     # via exa-py
 orjson==3.10.18
     # via langsmith
