@@ -11,8 +11,6 @@ from typing import List, Optional
 from rich.console import Console
 from rich.markdown import Markdown
 
-
-from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_exa.tools import ExaSearchResults
@@ -108,7 +106,6 @@ def fact_check(
     """
     import time
     start_time = time.time()
-    # load_dotenv()
     llm = OllamaLLM(model=model)
     exa_client = Exa(api_key=exa)
     exa_tool = ExaSearchResults(
