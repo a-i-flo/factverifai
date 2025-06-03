@@ -85,12 +85,16 @@ ollama-up: ollama-setup
 
 ollama-init-model:
 	@echo "setting up default model (one time setup).."
-	@echo "waiting for ollama to be ready.."
+	@echo "checking if ollama docker image exists locally..."
+	@if ! docker images | grep -q ollama; then \
+		echo "ollama docker image not found - this will download ~2-3GB (first time only)"; \
+	fi
+	@echo "starting ollama service (this may take 5-10 minutes on first run)..."
 	@until docker compose exec ollama ollama list > /dev/null 2>&1; do \
-		echo "waiting for ollama.."; \
+		echo "waiting for ollama container to be ready... (checking every 5s)"; \
 		sleep 5; \
 	done
-	@echo "pulling default model.."
+	@echo "ollama is ready! now downloading model (~1GB)..."
 	docker compose exec ollama ollama pull gemma3:1b
 	@echo "model setup complete"
 
