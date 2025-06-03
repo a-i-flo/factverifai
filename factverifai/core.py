@@ -26,6 +26,17 @@ DEFAULT_EXA_RESULTS = int(os.getenv('DEFAULT_EXA_RESULTS', '5'))
 DEFAULT_MAX_WORKERS = int(os.getenv('DEFAULT_MAX_WORKERS', '4'))
 
 # ---------- Utilities ----------
+class OpenAIChatLLM:
+    def __init__(self, api_key, base_url, model):
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
+        self.model = model
+
+    def invoke(self, prompt):
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return response.choices[0].message.content.strip()
 
 def timestamp_filename(prefix="fact_check", extension=".md") -> str:
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -103,30 +114,21 @@ def process_single_claim(
 def fact_check(
     text: str,
     output: str = "console",
-    model: str = None,
-    exa_results: int = None,
+    model: str = "llama3.1",
+    exa_results: int = 5,
     treat_input_as_single_claim: bool = False,
     max_workers: int = None,
     verbose: bool = False,
-    exa: str = None,
+    EXA_API_KEY
 ) -> list:
     """
     Main pipeline: extract claims, search, process evidence, fact-check (parallel for each claim).
     """
     import time
     start_time = time.time()
-    
-    # Use defaults from environment if not specified
-    model = LOCAL_LLM_MODEL
-    exa_results = exa_results or DEFAULT_EXA_RESULTS
-    max_workers = max_workers or DEFAULT_MAX_WORKERS
-    
+    load_dotenv()
     llm = OllamaLLM(model=model)
-    exa_client = Exa(api_key=exa)
-    exa_tool = ExaSearchResults(
-        client=exa_client,
-        exa_api_key=exa,
-        )
+    exa_tool = ExaSearchResults(EXA_API_KEY)
 
     # Claim extraction
     if treat_input_as_single_claim:
