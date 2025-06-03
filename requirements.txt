@@ -21,6 +21,8 @@ distro==1.9.0
     # via openai
 exa-py==1.14.0
     # via langchain-exa
+greenlet==3.2.2
+    # via sqlalchemy
 h11==0.16.0
     # via httpcore
 httpcore==1.0.9
