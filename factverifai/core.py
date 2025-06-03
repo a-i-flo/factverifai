@@ -7,8 +7,6 @@ from datetime import datetime
 from textwrap import dedent
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Optional
-from rich.console import Console
-from rich.markdown import Markdown
 from dotenv import load_dotenv
 
 from langchain_ollama import OllamaLLM
