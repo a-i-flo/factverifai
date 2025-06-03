@@ -61,7 +61,7 @@ Visit the Ollama website https://ollama.com/download and download the latest ver
 
 Install the version used in this project
 ```
-ollama pull llama3.1
+ollama pull gemma3:1b
 ```
 4. Register for an Exa Api Key
 
