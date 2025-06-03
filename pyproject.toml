@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "factverifai"
-version = "0.1.0"
+version = "0.1.4"
 description = "AI-powered fact-checking Python library"
 authors = [{ name = "Your Name", email = "your@email.com" }]
 readme = "README.md"
@@ -20,14 +20,17 @@ dependencies = [
     "langchain",
     "langgraph",
     "langchain_community",
-    "langchain-ollama"
+    "langchain-ollama",
+    "langchain-exa",
+    "rich",
+    "requests"
 ]
 
 [project.urls]
 Homepage = "https://github.com/a-i-flo/factverifai"
 
 [tool.setuptools.packages.find]
-where = ["factverifai"]
+where = ["."]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
