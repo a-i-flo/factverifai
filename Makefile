@@ -59,3 +59,51 @@ build: create-env
 
 publish: build
 	$(ENV_NAME)/bin/twine upload dist/*
+
+
+
+# ollama docker commands
+ollama-setup:
+	@echo "setting up ollama environment.."
+	@if [ ! -f .env ]; then \
+		echo "creating .env from .env.example.."; \
+		cp .env.example .env; \
+		echo "please edit .env file with your EXA_API_KEY"; \
+	else \
+		echo ".env file already exists"; \
+	fi
+
+ollama-up: ollama-setup
+	@echo "starting ollama service.."
+	@if grep -q "USE_NVIDIA_GPU=true" .env 2>/dev/null; then \
+		echo "using nvidia gpu profile.."; \
+		docker compose --profile gpu up -d; \
+	else \
+		echo "using cpu profile.."; \
+		docker compose --profile cpu up -d; \
+	fi
+
+ollama-init-model:
+	@echo "setting up default model (one time setup).."
+	@echo "waiting for ollama to be ready.."
+	@until docker compose exec ollama ollama list > /dev/null 2>&1; do \
+		echo "waiting for ollama.."; \
+		sleep 5; \
+	done
+	@echo "pulling default model.."
+	docker compose exec ollama ollama pull gemma3:1b
+	@echo "model setup complete"
+
+ollama-down:
+	@echo "stopping ollama service..."
+	docker compose down
+
+ollama-full-setup: ollama-up ollama-init-model
+	@echo "ollama setup complete"
+	@echo ""
+	@echo "now install factverifai in your project:"
+	@echo "  pip install factverifai"
+	@echo ""
+	@echo "then use it in python:"
+	@echo "  from factverifai import fact_check"
+	@echo "  fact_check('your claim here')"
