@@ -2,7 +2,7 @@ services:
   ollama-cpu:
     image: ollama/ollama:latest
     container_name: ollama
-    command: ["ollama", "serve"]
+    command: ["serve"]
     ports:
       - "11434:11434"
     volumes:
@@ -21,7 +21,7 @@ services:
   ollama-gpu:
     image: ollama/ollama:latest
     container_name: ollama
-    command: ["ollama", "serve"]
+    command: ["serve"]
     ports:
       - "11434:11434"
     volumes:
