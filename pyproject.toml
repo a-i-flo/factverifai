@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "factverifai"
-version = "0.1.6"
+version = "0.1.7"
 description = "AI-powered fact-checking Python library"
 authors = [{ name = "Your Name", email = "iliescuaf@gmail.com" }]
 readme = "README.md"
