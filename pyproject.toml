@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "factverifai"
-version = "0.1.4"
+version = "0.1.5"
 description = "AI-powered fact-checking Python library"
-authors = [{ name = "Your Name", email = "your@email.com" }]
+authors = [{ name = "Your Name", email = "iliescuaf@gmail.com" }]
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.13"
@@ -16,13 +16,11 @@ dependencies = [
     "ollama",
     "exa_py",
     "python-dotenv",
-    "spacy",
     "langchain",
     "langgraph",
     "langchain_community",
     "langchain-ollama",
     "langchain-exa",
-    "rich",
     "requests"
 ]
 
