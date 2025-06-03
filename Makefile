@@ -48,9 +48,6 @@ add-jupyter-kernel: create-env
 		$(ENV_NAME)/bin/python -m ipykernel install --user --name=$(ENV_NAME) --display-name "Jupyter $(ENV_NAME)"; \
 	fi
 
-postinstall: create-env
-	$(ENV_NAME)/bin/python -m spacy download en_core_web_sm
-
 activate:
 	@echo "To activate, run: source $(ENV_NAME)/bin/activate"
 
@@ -62,3 +59,55 @@ build: create-env
 
 publish: build
 	$(ENV_NAME)/bin/twine upload dist/*
+
+
+
+# ollama docker commands
+ollama-setup:
+	@echo "setting up ollama environment.."
+	@if [ ! -f .env ]; then \
+		echo "creating .env from .env.example.."; \
+		cp .env.example .env; \
+		echo "please edit .env file with your EXA_API_KEY"; \
+	else \
+		echo ".env file already exists"; \
+	fi
+
+ollama-up: ollama-setup
+	@echo "starting ollama service.."
+	@if grep -q "USE_NVIDIA_GPU=true" .env 2>/dev/null; then \
+		echo "using nvidia gpu profile.."; \
+		docker compose --profile gpu up -d; \
+	else \
+		echo "using cpu profile.."; \
+		docker compose --profile cpu up -d; \
+	fi
+
+ollama-init-model:
+	@echo "setting up default model (one time setup).."
+	@echo "checking if ollama docker image exists locally..."
+	@if ! docker images | grep -q ollama; then \
+		echo "ollama docker image not found - this will download ~2-3GB (first time only)"; \
+	fi
+	@echo "starting ollama service (this may take 5-10 minutes on first run)..."
+	@until docker compose exec ollama ollama list > /dev/null 2>&1; do \
+		echo "waiting for ollama container to be ready... (checking every 5s)"; \
+		sleep 5; \
+	done
+	@echo "ollama is ready! now downloading model (~1GB)..."
+	docker compose exec ollama ollama pull gemma3:1b
+	@echo "model setup complete"
+
+ollama-down:
+	@echo "stopping ollama service..."
+	docker compose down
+
+ollama-full-setup: ollama-up ollama-init-model
+	@echo "ollama setup complete"
+	@echo ""
+	@echo "now install factverifai in your project:"
+	@echo "  pip install factverifai"
+	@echo ""
+	@echo "then use it in python:"
+	@echo "  from factverifai import fact_check"
+	@echo "  fact_check('your claim here')"

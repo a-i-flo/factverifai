@@ -12,12 +12,18 @@ pip install factverifai
 ```
 
 ## How to use
-from factverifai import fact_check
+Create new .env example from .env.example and paste EXA API key
 
 ```
+import os
+from dotenv import load_dotenv
+from factverifai import fact_check
+
+load_dotenv()
+
 text = "Nicușor Dan is the president of Romania in 2025, winning against Simion"
 
-fact_check(text, output="files/", max_workers=4, verbose = True)
+fact_check(text, output="files/", max_workers=4, verbose = True, exa=os.getenv("EXA_API_KEY"))
 ```
 
 
@@ -55,7 +61,7 @@ Visit the Ollama website https://ollama.com/download and download the latest ver
 
 Install the version used in this project
 ```
-ollama pull llama3.1
+ollama pull gemma3:1b
 ```
 4. Register for an Exa Api Key
 

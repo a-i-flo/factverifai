@@ -10,13 +10,20 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Optional
 from rich.console import Console
 from rich.markdown import Markdown
-
-
 from dotenv import load_dotenv
+
 from langchain_ollama import OllamaLLM
 from langchain.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_exa.tools import ExaSearchResults
-from openai import OpenAI
+from exa_py import Exa
+
+# load environment variables
+load_dotenv()
+
+# llm model defaults
+LOCAL_LLM_MODEL = os.getenv('LOCAL_LLM_MODEL')
+DEFAULT_EXA_RESULTS = int(os.getenv('DEFAULT_EXA_RESULTS', '5'))
+DEFAULT_MAX_WORKERS = int(os.getenv('DEFAULT_MAX_WORKERS', '4'))
 
 # ---------- Utilities ----------
 class OpenAIChatLLM:
@@ -107,14 +114,12 @@ def process_single_claim(
 def fact_check(
     text: str,
     output: str = "console",
-    model: str = "albert-small",
+    model: str = "llama3.1",
     exa_results: int = 5,
     treat_input_as_single_claim: bool = False,
-    max_workers: int = 4,
+    max_workers: int = None,
     verbose: bool = False,
-    EXA_API_KEY=None,
-    OPENAI_API_KEY=None,
-    OPENAI_BASE_URL="https://albert.api.etalab.gouv.fr/v1"
+    EXA_API_KEY
 ) -> list:
     """
     Main pipeline: extract claims, search, process evidence, fact-check (parallel for each claim).
@@ -122,11 +127,7 @@ def fact_check(
     import time
     start_time = time.time()
     load_dotenv()
-    llm = OpenAIChatLLM(
-        api_key=OPENAI_API_KEY or os.getenv("OPENAI_API_KEY"),
-        base_url=OPENAI_BASE_URL,
-        model=model
-    )
+    llm = OllamaLLM(model=model)
     exa_tool = ExaSearchResults(EXA_API_KEY)
 
     # Claim extraction
