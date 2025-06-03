@@ -125,7 +125,7 @@ def fact_check(
 
         claims_output = llm.invoke(extract_claims_prompt)
         claims_list = parse_claims_to_list(claims_output)
-        original_claims = [text.strip()] * len(claims_list)
+        original_claims = claims_list
         if not claims_list:
             print("No fact-checkable claims found.")
             return {}

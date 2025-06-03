@@ -5,13 +5,17 @@ from factverifai import fact_check
 from dotenv import load_dotenv
 load_dotenv()
 
-text = 'Mongolia PM resigns after public fury. British cuisine is the best in the world. Belgium has better cheese than the France.'
-
+text = """
+Mongolia PM resigns after public fury. \n
+British cuisine recently voted as number 1 food in Europe. \n
+Hop to it, Space Hoppers to return as part of new green travel revolution. \n
+Brilliant PSG demolish Inter Milan 4-0 to win first Champions League title.
+"""
 #%%
 # To use Open AI:
 result_openai = fact_check(
     text,
-    model="albert-small",
+    model="albert-large",
     llm_backend="openai",
     max_workers=4,
     verbose=True,
